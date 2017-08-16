@@ -5,6 +5,9 @@ import _ from 'lodash';
 import { fetchPosts } from '../actions';
 
 class PostIndex extends Component {
+
+  // you could also use componentWillMount() but you would still need to render again when data comes back
+  // this will be called ONCE after component first renders
   componentDidMount() {
     this.props.fetchPosts();
   }
@@ -22,7 +25,6 @@ class PostIndex extends Component {
   }
 
   render(){
-    console.log(this.renderPosts());
     return (
       <div>
         <div className="text-xs-right">
