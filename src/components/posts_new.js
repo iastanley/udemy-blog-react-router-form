@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { Link } from 'react-router-dom';
 
 class PostsNew extends Component {
   renderField(field) {
-    const { touched, error } = field.meta;
-    const className = `form-group ${touched && error ? 'has-danger':''}`;
+    // use touched if you want error message to show up BEFORE submit
+    // use submitFailed if you want error message to show up only AFTER submit
+    const { label, input, meta: { submitFailed, error } } = field;
+    // ^This syntax is equivalent to:
+    // const { submitFailed, error } = field.meta;
+    // const { label, input } = field;
+
+    const className = `form-group ${submitFailed && error ? 'has-danger':''}`;
 
     return (
       <div className={className}>
-        <label>{field.label}</label>
+        <label>{label}</label>
         <input
           className="form-control"
           type="text"
-          {...field.input}
+          {...input}
         />
-        <div className="text-help">{touched ? error : ''}</div>
+        <div className="text-help">{submitFailed ? error : ''}</div>
       </div>
     );
   }
@@ -23,7 +30,7 @@ class PostsNew extends Component {
     console.log(values);
   }
 
-  // figure out later how to make the Post content a textarea not an input
+  // TODO - figure out later how to make the Post content a textarea not an input
   render() {
     // prop from redux-form
     // handleSubmit is a higher order function from redux-form
@@ -44,6 +51,7 @@ class PostsNew extends Component {
           name="content"
           component={this.renderField}/>
         <button type="submit" className="btn btn-primary">Save</button>
+        <Link to="/" className="btn btn-danger">Cancel</Link>
       </form>
     );
   }
