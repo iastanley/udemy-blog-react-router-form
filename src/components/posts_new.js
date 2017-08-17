@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createPost } from '../actions';
 
 class PostsNew extends Component {
   renderField(field) {
@@ -27,7 +29,10 @@ class PostsNew extends Component {
   }
   // this is where we will handle submitting data to server
   onSubmit(values) {
-    console.log(values);
+    // use a callback to redirect AFTER network request completes
+    this.props.createPost(values, () => {
+      this.props.history.push('/');
+    });
   }
 
   // TODO - figure out later how to make the Post content a textarea not an input
@@ -81,4 +86,7 @@ function validate(values) {
 export default reduxForm({
   validate,
   form: 'PostsNewForm' // name for this form - needs to be unique
-})(PostsNew);
+})(
+  // passing reduxForm a connected component
+  connect(null, { createPost })(PostsNew)
+);
