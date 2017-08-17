@@ -5,3 +5,12 @@ body {
 form a {
   margin: 0 10px;
 }
+
+.post-show h3, .post-show h6, .post-show p {
+  text-align: center;
+}
+
+.post-show div {
+  text-align: center;
+  margin: 50px 0;
+}
