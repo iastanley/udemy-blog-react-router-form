@@ -6,21 +6,30 @@ import _ from 'lodash';
 import { createPost } from '../actions';
 
 // refactor to have use FIELDS config object
+// also consider running a custom validation function
 const FIELDS = {
   title: {
     type: 'input',
     label: 'Title',
-    errorMsg: 'Enter a title'
+    invalid: value => {
+      if(!value) {
+        return 'Enter a title';
+      }
+      if (value.length < 3) {
+        return 'Title must be at least 3 characters';
+      }
+      return false;
+    }
   },
   categories: {
     type: 'input',
     label: 'Categories',
-    errorMsg: 'Enter some categories'
+    invalid: value => value ? '' : 'Enter some categories'
   },
   content: {
     type: 'textarea',
     label: 'Post Content',
-    errorMsg: 'Enter some content'
+    invalid: value => value ? '' : 'Enter some content'
   }
 }
 
@@ -78,8 +87,8 @@ function validate(values) {
   const errors = {};
   // lodash each() method takes (value,key) as callback args
   _.each(FIELDS, (config, field) => {
-    if(!values[field]) {
-      errors[field] = config.errorMsg;
+    if(config.invalid(values[field])) {
+      errors[field] = config.invalid(values[field]);
     }
   });
   return errors;
