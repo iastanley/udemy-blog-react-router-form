@@ -8,47 +8,44 @@ export const DELETE_POST = 'DELETE_POST';
 const ROOT_URL = 'http://reduxblog.herokuapp.com/api';
 const API_KEY = '?key=iasblogapikey';
 
-export function fetchPosts() {
-  //making a api request in action creator
-  //now fetchPosts is an async action
-  const request = axios.get(`${ROOT_URL}/posts${API_KEY}`);
-
-  return {
-    type: FETCH_POSTS,
-    payload: request
-  };
+export const fetchPosts = () => dispatch => {
+  axios.get(`${ROOT_URL}/posts${API_KEY}`)
+    .then(({ data }) => {
+      dispatch({
+        type: FETCH_POSTS,
+        payload: data
+      });
+    });
 }
 
-export function createPost(values, callback) {
-  // Not sure exactly how to do error handling but I think some is needed
-  const request =
-    axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
-      .then(() => callback())
-      .catch(err => console.log('Network Error: ', err));
-
-  return {
-    type: CREATE_POST,
-    payload: request
-  }
+export const createPost = (values, callback) => dispatch => {
+  axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
+    .then(({data}) => {
+      callback(); // callback to redirect on successful network request
+      dispatch({
+        type: CREATE_POST,
+        payload: data
+      });
+    });
 }
 
-export function fetchOnePost(id) {
-  const request = axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`);
-
-  return {
-    type: FETCH_ONE_POST,
-    payload: request
-  }
+export const fetchOnePost = id => dispatch => {
+  axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`)
+    .then(({ data }) => {
+      dispatch({
+        type: FETCH_ONE_POST,
+        payload: data
+      });
+    });
 }
 
-export function deletePost(id, callback) {
-  const request =
-    axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`)
-      .then(() => callback())
-      .catch(err => console.log('Network Error: ', err));
-
-  return {
-    type: DELETE_POST,
-    payload: id
-  }
+export const deletePost = (id, callback) => dispatch => {
+  axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`)
+    .then(() => {
+      callback();
+      dispatch({
+        type: DELETE_POST,
+        payload: id
+      });
+    });
 }
