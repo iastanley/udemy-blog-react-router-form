@@ -7,5 +7,5 @@ const NotFound = props => {
     </div>
   );
 }
-
+// it is not possible to export default on same line as var, let or const
 export default NotFound;
